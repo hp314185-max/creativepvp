@@ -9,7 +9,18 @@
   color: #888;
   font-weight: 500;
 }
+@media (max-width: 600px) {
+  .mc-row {
+    grid-template-columns: 40px 1fr 80px;
+    font-size: 13px;
+  }
 
+  .mc-player img {
+    width: 24px;
+    height: 24px;
+  }
+}
+  
 .mc-row div:last-child {
   text-align: right;
   font-weight: 600;
