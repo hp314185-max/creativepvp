@@ -1,25 +1,201 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>CreativePVP</title>
-  <style>
-    body {
-      margin: 0;
-      background: #0b0b0b;
-      color: white;
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    h1 {
-      font-size: 32px;
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>CreativePVP Rankings</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0b0e13;
+  --card: #121723;
+  --border: #1f2635;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --accent: #3b82f6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+}
+
+header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+nav a {
+  color: var(--muted);
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav a:hover {
+  color: var(--text);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 32px auto;
+  padding: 0 16px;
+}
+
+h1 {
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+
+.table {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row.header {
+  background: #0f1320;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.skin {
+  width: 32px;
+  height: 32px;
+  background: #333;
+  border-radius: 4px;
+}
+
+.rank {
+  font-weight: 600;
+}
+
+.footer {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+</style>
 </head>
+
 <body>
-  <h1>CreativePVP — Site em construção</h1>
+
+<header>
+  <div class="logo">CreativePVP</div>
+  <nav>
+    <a href="#">Rankings</a>
+    <a href="#">Players</a>
+    <a href="#">Discord</a>
+  </nav>
+</header>
+
+<div class="container">
+  <h1>Overall Rankings</h1>
+
+  <div class="tabs">
+    <div class="tab active">Overall</div>
+    <div class="tab">PvP</div>
+    <div class="tab">Archer</div>
+    <div class="tab">Pot</div>
+  </div>
+
+  <div class="table">
+    <div class="row header">
+      <div>#</div>
+      <div>Player</div>
+      <div>Rating</div>
+    </div>
+
+    <div class="row">
+      <div class="rank">1</div>
+      <div class="player">
+        <div class="skin"></div>
+        PlayerOne
+      </div>
+      <div>2000</div>
+    </div>
+
+    <div class="row">
+      <div class="rank">2</div>
+      <div class="player">
+        <div class="skin"></div>
+        PlayerTwo
+      </div>
+      <div>1850</div>
+    </div>
+
+    <div class="row">
+      <div class="rank">3</div>
+      <div class="player">
+        <div class="skin"></div>
+        PlayerThree
+      </div>
+      <div>1700</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  © 2025 CreativePVP • Not affiliated with Mojang or Microsoft
+</div>
+
 </body>
 </html>
