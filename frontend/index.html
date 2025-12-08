@@ -4,124 +4,152 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>CreativePVP — Rankings</title>
+
 <style>
 :root{
-  --bg:#090c10; --panel:#0c1116; --muted:#8b9bb0; --text:#e5edf5;
-  --card:#0c1014; --accent:#e6b35a;
+  --bg:#0a0d12;
+  --panel:#0e131a;
+  --row:#0f141b;
+  --border:rgba(255,255,255,.06);
+  --text:#e6edf3;
+  --muted:#9aa7b2;
+  --accent:#e6b35a;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui,Arial;background:var(--bg);color:var(--text)}
-.header{padding:10px 12px;background:var(--panel);display:flex;align-items:center;gap:12px}
-.logo{font-weight:800;color:var(--accent)}
-.container{max-width:1100px;margin:12px auto;padding:0 12px}
-.top{display:flex;justify-content:space-between;align-items:center;margin:12px 0}
-.top .server{color:var(--muted);font-size:13px}
-.list{display:flex;flex-direction:column;gap:8px}
-.row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:6px;background:linear-gradient(180deg,var(--card),#0b0f12);border:1px solid rgba(255,255,255,.02)}
-.rank{width:36px;text-align:right;font-weight:700;color:#cbd5e1}
-.avatar{width:36px;height:36px;border-radius:6px;overflow:hidden;border:1px solid rgba(255,255,255,.04)}
-.avatar img{width:100%;height:100%;object-fit:cover}
-.name{font-weight:700;font-size:13px}
-.meta{font-size:12px;color:var(--muted)}
-.points{margin-left:auto;font-weight:700}
-.empty{padding:20px;text-align:center;color:var(--muted)}
-.controls{margin:12px 0;display:flex;gap:8px;align-items:center}
-.btn{background:transparent;border:1px solid rgba(255,255,255,.04);padding:8px 10px;border-radius:8px;color:var(--muted);cursor:pointer}
-.notice{font-size:13px;color:var(--muted);margin-top:8px}
-.footer{color:var(--muted);text-align:center;padding:36px 12px;font-size:13px}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Arial;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* HEADER */
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  height:48px;
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
+}
+.logo{
+  font-weight:800;
+  font-size:14px;
+  color:var(--accent);
+}
+.tabs{
+  display:flex;
+  gap:14px;
+}
+.tab{
+  font-size:12px;
+  color:var(--muted);
+  cursor:pointer;
+  padding:6px 0;
+  border-bottom:2px solid transparent;
+}
+.tab.active{
+  color:var(--text);
+  border-color:var(--accent);
+}
+
+/* CONTENT */
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:12px;
+}
+.table{
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+}
+.row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 10px;
+  background:var(--row);
+  border-bottom:1px solid var(--border);
+  font-size:12px;
+}
+.row:last-child{border-bottom:none}
+.rank{width:36px;text-align:right;font-weight:700}
+.avatar{
+  width:28px;height:28px;border-radius:4px;
+  overflow:hidden
+}
+.avatar img{width:100%}
+.name{font-weight:600}
+.points{margin-left:auto;font-weight:600}
+
+.empty{
+  padding:20px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
 </style>
 </head>
+
 <body>
 
-<div class="header">
+<header>
   <div class="logo">CreativePVP</div>
-  <div style="margin-left:8px;color:var(--muted)">Rankings seguros — apenas jogadores do seu servidor</div>
-</div>
+  <nav class="tabs">
+    <div class="tab active" data-mode="overall">Overall</div>
+    <div class="tab" data-mode="pvp">PvP</div>
+    <div class="tab" data-mode="sword">Sword</div>
+    <div class="tab" data-mode="axe">Axe</div>
+  </nav>
+</header>
 
 <div class="container">
-  <div class="top">
-    <div><h2 style="margin:0">Overall</h2><div class="notice">Somente jogadores autorizados serão exibidos</div></div>
-    <div class="server">creativecraftCS.aternos.me:24097</div>
-  </div>
-
-  <div class="controls">
-    <button id="refreshBtn" class="btn">Atualizar</button>
-    <button id="editListBtn" class="btn">Como editar a lista</button>
-  </div>
-
-  <div id="content">
-    <div id="empty" class="empty" style="display:none">Nenhum jogador autorizado. Vá em <strong>Editar lista</strong> para adicionar jogadores do seu servidor.</div>
-    <div id="list" class="list"></div>
-  </div>
-
-  <div class="footer">© 2025 CreativePVP • Somente jogadores do seu server aparecem aqui</div>
+  <div class="table" id="table"></div>
 </div>
 
 <script>
-/*
-Solução imediata: WHITELIST de jogadores.
-- Edite a lista abaixo (player names) no GitHub quando quiser adicionar/remover.
-- Futuramente eu mostro como popular automaticamente via plugin.
-*/
+const table = document.getElementById("table");
 
-// ======= EDITE AQUI A LISTA DOS JOGADORES DO SEU SERVIDOR =======
-const authorizedPlayers = [
-  // Exemplo:
-  // "Marlowww",
-  // "ItzRealMe",
+/* JOGADORES DO SEU SERVER (EDITÁVEL) */
+const players = [
+  {name:"SeuNick", points:120},
+  {name:"Player1", points:98},
+  {name:"Player2", points:75}
 ];
-// ===============================================================
 
-const listEl = document.getElementById('list');
-const emptyEl = document.getElementById('empty');
-
-function renderList(){
-  listEl.innerHTML = '';
-  if(!authorizedPlayers || authorizedPlayers.length === 0){
-    emptyEl.style.display = 'block';
+function render(mode){
+  table.innerHTML = "";
+  if(players.length === 0){
+    table.innerHTML = '<div class="empty">Nenhum jogador registrado</div>';
     return;
   }
-  emptyEl.style.display = 'none';
-
-  // Para cada nick autorizado, tentamos puxar avatar via crafatar (sem depender do MCTiers)
-  authorizedPlayers.forEach((nick, idx) => {
-    const row = document.createElement('div');
-    row.className = 'row';
-
-    const rank = document.createElement('div');
-    rank.className = 'rank';
-    rank.textContent = (idx+1) + '.';
-
-    const avatarWrap = document.createElement('div');
-    avatarWrap.className = 'avatar';
-    const img = document.createElement('img');
-    img.src = `https://crafatar.com/avatars/${encodeURIComponent(nick)}?size=64&overlay`;
-    img.alt = nick;
-    avatarWrap.appendChild(img);
-
-    const nameWrap = document.createElement('div');
-    nameWrap.innerHTML = `<div class="name">${nick}</div><div class="meta">Servidor • Jogador</div>`;
-
-    const points = document.createElement('div');
-    points.className = 'points';
-    points.textContent = '-'; // sem dados ainda
-
-    row.appendChild(rank);
-    row.appendChild(avatarWrap);
-    row.appendChild(nameWrap);
-    row.appendChild(points);
-
-    listEl.appendChild(row);
+  players.forEach((p,i)=>{
+    table.innerHTML += `
+      <div class="row">
+        <div class="rank">${i+1}</div>
+        <div class="avatar">
+          <img src="https://crafatar.com/avatars/${p.name}?overlay">
+        </div>
+        <div class="name">${p.name}</div>
+        <div class="points">${p.points}</div>
+      </div>
+    `;
   });
 }
 
-document.getElementById('refreshBtn').addEventListener('click', ()=>renderList());
-document.getElementById('editListBtn').addEventListener('click', ()=>{
-  alert('Para editar a lista: abra o repositório no GitHub → frontend/index.html → edite a variável authorizedPlayers e adicione os nicks.\n\nEx: const authorizedPlayers = [\"SeuNick\", \"Amigo1\"];');
+/* ABAS */
+document.querySelectorAll(".tab").forEach(tab=>{
+  tab.onclick = ()=>{
+    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+    tab.classList.add("active");
+    render(tab.dataset.mode);
+  };
 });
 
-// init
-renderList();
+/* INIT */
+render("overall");
 </script>
 
 </body>
