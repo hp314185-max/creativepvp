@@ -1,160 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CreativePVP</title>
+  <title>CreativePVP – Rankings</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>CreativePVP — Rankings</title>
-
-<style>
-:root{
-  --bg:#0a0d12;
-  --panel:#0e131a;
-  --row:#0f141b;
-  --border:rgba(255,255,255,.06);
-  --text:#e6edf3;
-  --muted:#9aa7b2;
-  --accent:#e6b35a;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Inter,system-ui,Arial;
-  background:var(--bg);
-  color:var(--text);
-}
-
-/* HEADER */
-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 16px;
-  height:48px;
-  background:var(--panel);
-  border-bottom:1px solid var(--border);
-}
-.logo{font-weight:800;font-size:14px;color:var(--accent)}
-.tabs{display:flex;gap:14px}
-.tab{
-  font-size:12px;
-  color:var(--muted);
-  cursor:pointer;
-  padding:6px 0;
-  border-bottom:2px solid transparent;
-}
-.tab.active{
-  color:var(--text);
-  border-color:var(--accent);
-}
-
-/* CONTENT */
-.container{max-width:1100px;margin:auto;padding:12px}
-.table{
-  border:1px solid var(--border);
-  border-radius:6px;
-  overflow:hidden;
-}
-.row{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:8px 10px;
-  background:var(--row);
-  border-bottom:1px solid var(--border);
-  font-size:12px;
-}
-.row:last-child{border-bottom:none}
-.rank{width:32px;text-align:right;font-weight:700}
-.tier{
-  width:36px;
-  text-align:center;
-  font-weight:800;
-  font-size:11px;
-  border-radius:4px;
-  padding:3px 0;
-}
-.tier.splus{background:#ff5252;color:#000}
-.tier.s{background:#ffb703;color:#000}
-.tier.a{background:#4cc9f0;color:#000}
-.tier.b{background:#80ed99;color:#000}
-.tier.c{background:#adb5bd;color:#000}
-
-.avatar{width:28px;height:28px;border-radius:4px;overflow:hidden}
-.avatar img{width:100%}
-.name{font-weight:600}
-.points{margin-left:auto;font-weight:600}
-</style>
-</head>
-
 <body>
 
-<header>
-  <div class="logo">CreativePVP</div>
-  <nav class="tabs">
-    <div class="tab active" data-mode="overall">Overall</div>
-    <div class="tab" data-mode="pvp">PvP</div>
-    <div class="tab" data-mode="sword">Sword</div>
-    <div class="tab" data-mode="axe">Axe</div>
-  </nav>
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">CreativePVP</div>
+    <nav class="tabs">
+      <a class="active">Overall</a>
+      <a>PvP</a>
+      <a>Archer</a>
+      <a>Build</a>
+    </nav>
+  </div>
 </header>
 
-<div class="container">
-  <div class="table" id="table"></div>
-</div>
+<main class="main">
+  <h1>Overall Rankings</h1>
 
-<script>
-const table = document.getElementById("table");
+  <div class="table">
+    <div class="row head">
+      <div>#</div>
+      <div>Player</div>
+      <div>Points</div>
+    </div>
 
-/* JOGADORES DO SEU SERVER (EDITÁVEL) */
-const players = [
-  {name:"SeuNick", points:120, tier:"S+"},
-  {name:"Player1", points:98, tier:"S"},
-  {name:"Player2", points:75, tier:"A"},
-  {name:"Player3", points:50, tier:"B"}
-];
-
-function tierClass(t){
-  if(t==="S+") return "splus";
-  if(t==="S") return "s";
-  if(t==="A") return "a";
-  if(t==="B") return "b";
-  return "c";
-}
-
-function render(){
-  table.innerHTML = "";
-  players.forEach((p,i)=>{
-    table.innerHTML += `
-      <div class="row">
-        <div class="rank">${i+1}</div>
-        <div class="tier ${tierClass(p.tier)}">${p.tier}</div>
-        <div class="avatar">
-          <img src="https://crafatar.com/avatars/${p.name}?overlay">
-        </div>
-        <div class="name">${p.name}</div>
-        <div class="points">${p.points}</div>
+    <div class="row">
+      <div>1</div>
+      <div class="player">
+        <img src="https://mc-heads.net/avatar/Notch/32">
+        PlayerOne
       </div>
-    `;
-  });
-}
+      <div>1520</div>
+    </div>
 
-/* ABAS (por enquanto visual) */
-document.querySelectorAll(".tab").forEach(tab=>{
-  tab.onclick = ()=>{
-    document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-    tab.classList.add("active");
-    render();
-  };
-});
-
-render();
-</script>
+    <div class="row">
+      <div>2</div>
+      <div class="player">
+        <img src="https://mc-heads.net/avatar/Steve/32">
+        PlayerTwo
+      </div>
+      <div>1380</div>
+    </div>
+  </div>
+</main>
 
 </body>
 </html>
