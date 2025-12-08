@@ -1,11 +1,17 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>CreativePVP — Rankings</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
 :root{
-  --bg:#090c10;
-  --panel:#0c1116;
-  --card:#0c1014;
-  --text:#e5edf5;
-  --muted:#8b9bb0;
-  --accent:#e6b35a;
+  --bg:#0a0d12;
+  --panel:#0e131a;
+  --row:#0f141b;
+  --border:rgba(255,255,255,.06);
+  --text:#e6edf3;
+  --muted:#9aa7b2;
 }
 *{box-sizing:border-box}
 body{
@@ -14,301 +20,87 @@ body{
   background:var(--bg);
   color:var(--text);
 }
-.header{
-  padding:8px 12px;
-  background:var(--panel);
-  border-bottom:1px solid rgba(255,255,255,.05);
+header{
+  height:44px;
   display:flex;
   align-items:center;
-}
-.logo{
+  padding:0 14px;
+  background:var(--panel);
+  border-bottom:1px solid var(--border);
   font-weight:700;
-  font-size:14px;
+  font-size:13px;
 }
 .container{
   max-width:1100px;
   margin:auto;
   padding:10px;
 }
+.table{
+  border:1px solid var(--border);
+  border-radius:6px;
+  overflow:hidden;
+}
 .row{
   display:flex;
   align-items:center;
   gap:10px;
-  padding:8px;
-  background:var(--card);
-  border:1px solid rgba(255,255,255,.05);
-  border-radius:6px;
-  margin-bottom:6px;
+  padding:8px 10px;
+  background:var(--row);
+  border-bottom:1px solid var(--border);
+  font-size:12px;
 }
-.rank{
-  width:32px;
-  text-align:right;
-  font-weight:700;
-}
+.row:last-child{border-bottom:none}
+.rank{width:36px;text-align:right;font-weight:700}
 .avatar{
-  width:32px;
-  height:32px;
-  border-radius:4px;
-  overflow:hidden;
+  width:28px;height:28px;border-radius:4px;
+  overflow:hidden;background:#000
 }
-.avatar img{
-  width:100%;
-}
-.name{
-  font-size:13px;
-  font-weight:600;
-}
-.meta{
+.avatar img{width:100%}
+.name{font-weight:600}
+.region{
   font-size:11px;
   color:var(--muted);
 }
 .points{
   margin-left:auto;
-  font-size:12px;
   font-weight:600;
 }
-</style>
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:80}
-.modal{width:92%;max-width:520px;background:linear-gradient(180deg,#0f1418,#0b0f12);border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03)}
-.close{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.03);width:36px;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.footer{color:var(--muted);text-align:center;padding:30px 14px;font-size:13px}
-.loading{color:var(--muted);text-align:center;padding:18px}
-@media(min-width:900px){.row{padding:12px 16px;border-radius:12px}.rank{width:64px;flex:0 0 64px}}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="logo">CreativePVP</div>
-  <div class="search"><input id="q" placeholder="Search player or paste name..." /></div>
-  <div style="display:flex;gap:8px"><a class="btn" href="https://discord.gg/GKCacccY" target="_blank">Discord</a></div>
-</div>
+<header>CreativePVP — Overall</header>
 
 <div class="container">
-  <div class="topline">
-    <div><h2 style="margin:0;font-size:18px">Rankings <span style="color:var(--muted);font-weight:600">Overall</span></h2></div>
-    <div style="color:var(--muted)">creativecraftCS.aternos.me:24097</div>
-  </div>
-
-  <div id="tabs" class="tabs"></div>
-
-  <div id="content">
-    <div id="loading" class="loading">Carregando rankings...</div>
-    <div id="list" class="list" style="display:none"></div>
-    <div id="pager" class="pager" style="display:none">
-      <button id="prev" class="btn">Prev</button>
-      <div id="pageinfo" style="align-self:center;color:var(--muted)"></div>
-      <button id="next" class="btn">Next</button>
-    </div>
-  </div>
-
-  <div id="modalRoot"></div>
-
-  <div class="footer">© 2025 CreativePVP — visual inspirada em sites de ranking</div>
+  <div class="table" id="ranking"></div>
 </div>
 
 <script>
-const API_BASE = 'https://mctiers.com/api'; // change to proxy if CORS blocked
-let currentTierKey = 'overall';
-let pageFrom = 0;
-let pageCount = 20;
+fetch("https://mctiers.com/api/tier/overall?count=50&from=0")
+.then(r=>r.json())
+.then(d=>{
+  const el=document.getElementById("ranking")
+  d.rankings.forEach((id,i)=>{
+    const p=d.players[id]
+    el.innerHTML+=`
+      <div class="row">
+        <div class="rank">${i+1}</div>
+        <div class="avatar">
+          <img src="https://crafatar.com/avatars/${id}?size=64&overlay">
+        </div>
+        <div>
+          <div class="name">${p.name}</div>
+          <div class="region">${p.region}</div>
+        </div>
+        <div class="points">${p.points}</div>
+      </div>`
+  })
+})
+</script>
 
-async function apiGET(path){
-  const url = API_BASE + path;
-  try{
-    const res = await fetch(url);
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    return await res.json();
-  }catch(e){
-    console.error('API error', e);
-    throw e;
-  }
-}
-
-function el(tag, props={}, children=[]){
-  const d = document.createElement(tag);
-  for(const k in props) if(k!=='on') d.setAttribute(k, props[k]);
-  if(props.on) d.addEventListener(props.on.ev, props.on.fn);
-  (Array.isArray(children)?children:[children]).flat().forEach(ch=>{
-    if(typeof ch==='string') d.appendChild(document.createTextNode(ch));
-    else if(ch) d.appendChild(ch);
-  });
-  return d;
-}
-
-function formatPlayerCard(id, playerData, rank){
-  const row = el('div',{class:'row', 'data-id':id});
-  const rankEl = el('div',{class:'rank'}, String(rank)+'.');
-  const info = el('div',{class:'player-info'});
-  const avatar = el('div',{class:'avatar'});
-  const img = el('img',{src:`https://crafatar.com/avatars/${playerData.name}?size=64&overlay`, alt:playerData.name});
-  avatar.appendChild(img);
-  const nameWrap = el('div',{},[
-    el('div',{class:'name'}, playerData.name),
-    el('div',{class:'meta'}, `${playerData.region || ''} • ${playerData.points} pts`)
-  ]);
-  info.appendChild(avatar); info.appendChild(nameWrap);
-
-  const tiersWrap = el('div',{class:'tiers'});
-  // show up to 8 fake icons if available (mctiers provides tiers in tierlist endpoint)
-  if(playerData.tiers && Array.isArray(playerData.tiers)){
-    playerData.tiers.slice(0,8).forEach(t=>{
-      tiersWrap.appendChild(el('div',{class:'tier'}, t[0] ? t[0].slice(0,2).toUpperCase() : '—'));
-    });
-  } else {
-    // fallback: show some placeholder icons
-    for(let i=0;i<6;i++) tiersWrap.appendChild(el('div',{class:'tier'}, '•'));
-  }
-
-  const points = el('div',{class:'points'}, String(playerData.points || 0));
-  row.appendChild(rankEl);
-  row.appendChild(info);
-  row.appendChild(tiersWrap);
-  row.appendChild(points);
-
-  row.addEventListener('click', ()=>openProfileModal(id, playerData));
-  return row;
-}
-
-async function loadTierlists(){
-  try{
-    const lists = await apiGET('/tierlists');
-    const keys = Object.keys(lists);
-    const tabs = document.getElementById('tabs');
-    tabs.innerHTML='';
-    // ensure overall is first (MCTiers uses /tier/overall)
-    const arr = ['overall', ...keys.filter(k=>k!=='overall')];
-    arr.forEach(k=>{
-      const t = el('div',{class:'tab ' + (k==='overall'?'active':''), 'data-key':k}, lists[k] && lists[k].title ? lists[k].title : k);
-      t.addEventListener('click', ()=>{
-        document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-        t.classList.add('active');
-        currentTierKey = k;
-        pageFrom = 0;
-        loadRanking();
-      });
-      tabs.appendChild(t);
-    });
-  }catch(e){
-    document.getElementById('loading').textContent = 'Falha ao carregar categorias. (CORS/Network?)';
-  }
-}
-
-async function loadRanking(){
-  document.getElementById('loading').style.display='block';
-  document.getElementById('list').style.display='none';
-  document.getElementById('pager').style.display='none';
-  try{
-    let data;
-    if(currentTierKey === 'overall'){
-      data = await apiGET(`/tier/overall?count=${pageCount}&from=${pageFrom}`);
-      // data: { rankings: [uuid,...], players: {uuid:{name,region,points}} }
-      const ids = data.rankings || [];
-      const players = data.players || {};
-      const list = document.getElementById('list');
-      list.innerHTML='';
-      for(let i=0;i<ids.length;i++){
-        const id = ids[i];
-        const player = players[id] || {name:'Unknown', region:'', points:0};
-        const card = formatPlayerCard(id, player, pageFrom + i + 1);
-        list.appendChild(card);
-      }
-      document.getElementById('loading').style.display='none';
-      document.getElementById('list').style.display='flex';
-      document.getElementById('pager').style.display='flex';
-      document.getElementById('pageinfo').textContent = `Showing ${pageFrom+1} - ${pageFrom+ids.length}`;
-    } else {
-      // tier-specific endpoint returns tiers + players
-      const data2 = await apiGET(`/tier/${encodeURIComponent(currentTierKey)}?count=${pageCount}&from=${pageFrom}`);
-      // data2.rankings is array of tiers where each element has players and their tier index
-      // flatten to players list
-      const ids = [];
-      const players = data2.players || {};
-      (data2.rankings||[]).forEach(group=>{
-        group.forEach(item=>{
-          ids.push(item[0]);
-        });
-      });
-      const list = document.getElementById('list');
-      list.innerHTML='';
-      for(let i=0;i<ids.length;i++){
-        const id = ids[i];
-        const player = players[id] || {name:'Unknown', region:'', points:0};
-        const card = formatPlayerCard(id, player, pageFrom + i + 1);
-        list.appendChild(card);
-      }
-      document.getElementById('loading').style.display='none';
-      document.getElementById('list').style.display='flex';
-      document.getElementById('pager').style.display='flex';
-      document.getElementById('pageinfo').textContent = `Showing ${pageFrom+1} - ${pageFrom+ids.length}`;
-    }
-  }catch(e){
-    console.error(e);
-    document.getElementById('loading').textContent = 'Erro ao carregar ranking. Se "CORS" no console, veja a nota abaixo.';
-  }
-}
-
-async function openProfileModal(uuid, playerData){
-  // Try to fetch /profile/{uuid} for detailed info
-  let profile = null;
-  try{
-    const p = await apiGET(`/profile/${uuid}`);
-    profile = p || null;
-  }catch(e){ /* ignore */ }
-
-  const root = document.getElementById('modalRoot');
-  root.innerHTML = '';
-  const bg = el('div',{class:'modal-bg'});
-  const modal = el('div',{class:'modal'});
-  const closeBtn = el('div',{class:'close'},'✕');
-  closeBtn.addEventListener('click', ()=>root.innerHTML='');
-  modal.appendChild(closeBtn);
-
-  const avatar = el('div',{style:'display:flex;gap:12px;align-items:center'});
-  avatar.appendChild(el('div',{class:'avatar'}, el('img',{src:`https://crafatar.com/avatars/${playerData.name}?size=128&overlay`})));
-  const nameBlock = el('div',{}, [ el('div',{class:'name'}, playerData.name), el('div',{class:'meta'}, playerData.region || '') ]);
-  avatar.appendChild(nameBlock);
-  modal.appendChild(avatar);
-
-  if(profile && profile.tiers){
-    const title = el('div',{style:'margin-top:12px;font-weight:700'}, 'POSITION');
-    modal.appendChild(title);
-    // Show a highlighted banner like MCTiers
-    const banner = el('div',{style:'margin-top:8px;padding:12px;border-radius:8px;background:linear-gradient(90deg,#2a2f34,#172026);display:flex;align-items:center;gap:12px'});
-    banner.appendChild(el('div',{style:'background:#d9a93f;padding:8px;border-radius:8px;font-weight:800;color:#000'}, '🏆'));
-    banner.appendChild(el('div',{}, ['Overall ', el('span',{style:'opacity:.9;margin-left:6px'}, `(${playerData.points || 0} points)`)]));
-    modal.appendChild(banner);
-  }
-
-  // tiers
-  const tiersRow = el('div',{style:'display:flex;gap:8px;margin-top:12px;flex-wrap:wrap'});
-  if(profile && profile.tiers){
-    Object.keys(profile.tiers).slice(0,12).forEach(k=>{
-      tiersRow.appendChild(el('div',{style:'display:flex;flex-direction:column;align-items:center;gap:6px;margin-right:6px'}, [
-        el('div',{class:'tier'}, (k.slice(0,2).toUpperCase())),
-        el('div',{style:'font-size:11px;color:var(--muted)'}, k)
-      ]));
-    });
-  } else {
-    tiersRow.appendChild(el('div',{style:'color:var(--muted)'},'No tiers data'));
-  }
-  modal.appendChild(tiersRow);
-
-  bg.appendChild(modal);
-  root.appendChild(bg);
-}
-
-document.getElementById('q').addEventListener('keydown', async (e)=>{
-  if(e.key === 'Enter'){
-    const q = e.target.value.trim();
-    if(!q) return;
-    // try direct search_profile first
-    try{
-      const data = await apiGET(`/search_profile/${encodeURIComponent(q)}`);
-      // API might return uuid list or direct result, handle flexible
-      if(data && data.uuid){
-        // open profile with uuid
-        const uuid = data.uuid;
+</body>
+</html>
+const uuid = data.uuid;
         const pl = data.player || {name:q, points:0};
         openProfileModal(uuid, pl);
       } else if(Array.isArray(data) && data.length>0){
