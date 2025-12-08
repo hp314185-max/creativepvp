@@ -98,3 +98,7 @@ h1 {
   font-size: 22px;
   font-weight: 600;
 }
+.mc-row:not(.mc-head):hover {
+  background-color: #181818;
+  cursor: pointer;
+}
