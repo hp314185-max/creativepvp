@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>CreativePVP Rankings</title>
+<meta charset="UTF-8">
+<title>CreativePVP • Rankings</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --bg: #0b0e13;
-  --card: #121723;
-  --border: #1f2635;
-  --text: #e5e7eb;
-  --muted: #9ca3af;
+  --bg: #0e1117;
+  --panel: #161b22;
+  --panel-2: #0d1117;
+  --border: #30363d;
+  --text: #e6edf3;
+  --muted: #8b949e;
   --accent: #3b82f6;
 }
 
@@ -25,50 +26,202 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, system-ui, sans-serif;
 }
 
+/* HEADER */
 header {
-  padding: 16px 24px;
+  height: 56px;
+  background: var(--panel-2);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  padding: 0 24px;
 }
 
 .logo {
   font-weight: 700;
-  font-size: 20px;
+  font-size: 18px;
+}
+
+nav {
+  margin-left: 32px;
+  display: flex;
+  gap: 20px;
 }
 
 nav a {
   color: var(--muted);
-  margin-left: 20px;
   text-decoration: none;
   font-weight: 500;
+  font-size: 14px;
 }
 
 nav a:hover {
   color: var(--text);
 }
 
-.container {
-  max-width: 1100px;
+/* LAYOUT */
+.wrapper {
+  max-width: 1200px;
   margin: 32px auto;
   padding: 0 16px;
 }
 
-h1 {
-  font-size: 26px;
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
   margin-bottom: 20px;
 }
 
+/* TABS */
 .tabs {
   display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 
+.tab {
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 6px;
+  font-size: 13px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* TABLE */
+.table {
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 56px 1fr 120px;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.row.header {
+  background: var(--panel-2);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.rank {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.skin {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+.rating {
+  font-weight: 600;
+  text-align: right;
+  font-size: 14px;
+}
+
+/* FOOTER */
+footer {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  padding: 40px 20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">CreativePVP</div>
+  <nav>
+    <a href="#">Rankings</a>
+    <a href="#">Players</a>
+    <a href="https://discord.gg/GKCacccY" target="_blank">Discord</a>
+  </nav>
+</header>
+
+<div class="wrapper">
+  <div class="page-title">Overall Rankings</div>
+
+  <div class="tabs">
+    <div class="tab active">Overall</div>
+    <div class="tab">PvP</div>
+    <div class="tab">Archer</div>
+    <div class="tab">Pot</div>
+  </div>
+
+  <div class="table">
+    <div class="row header">
+      <div>#</div>
+      <div>Player</div>
+      <div style="text-align:right;">Rating</div>
+    </div>
+
+    <div class="row">
+      <div class="rank">1</div>
+      <div class="player">
+        <img class="skin" src="https://mc-heads.net/avatar/PlayerOne/24">
+        PlayerOne
+      </div>
+      <div class="rating">2012</div>
+    </div>
+
+    <div class="row">
+      <div class="rank">2</div>
+      <div class="player">
+        <img class="skin" src="https://mc-heads.net/avatar/PlayerTwo/24">
+        PlayerTwo
+      </div>
+      <div class="rating">1876</div>
+    </div>
+
+    <div class="row">
+      <div class="rank">3</div>
+      <div class="player">
+        <img class="skin" src="https://mc-heads.net/avatar/PlayerThree/24">
+        PlayerThree
+      </div>
+      <div class="rating">1720</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2025 CreativePVP • Not affiliated with Mojang or Microsoft
+</footer>
+
+</body>
+</html>
 .tab {
   padding: 10px 14px;
   background: var(--card);
