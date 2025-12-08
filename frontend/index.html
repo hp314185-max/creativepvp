@@ -1,79 +1,426 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>CreativePVP • Rankings</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CreativePVP — Rankings</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-:root {
-  --bg: #0e1117;
-  --panel: #161b22;
-  --panel-2: #0d1117;
-  --border: #30363d;
-  --text: #e6edf3;
-  --muted: #8b949e;
-  --accent: #3b82f6;
+:root{
+  --bg:#0b0f14;
+  --panel:#0f1419;
+  --panel-2:#12161b;
+  --muted:#94a3b8;
+  --text:#e6eef6;
+  --accent:#f7b733; /* gold-ish */
+  --card:#0e1318;
+  --soft:#11151a;
+  --glass: rgba(255,255,255,0.03);
+  --radius:14px;
 }
 
-* {
-  box-sizing: border-box;
+/* reset */
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,"Helvetica Neue",Arial;
+  background: linear-gradient(180deg,var(--bg), #07090b 1400px);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  line-height:1.2;
+  padding-bottom:60px;
 }
 
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Inter, system-ui, sans-serif;
+/* header */
+.header{
+  position:sticky;
+  top:0;
+  z-index:40;
+  background:linear-gradient(180deg,var(--panel-2), rgba(10,12,14,0.9));
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  padding:12px 16px;
+  display:flex;
+  gap:12px;
+  align-items:center;
 }
-
-/* HEADER */
-header {
-  height: 56px;
-  background: var(--panel-2);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-}
-
 .logo {
-  font-weight: 700;
-  font-size: 18px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+  font-size:18px;
+  letter-spacing:0.6px;
+  color: #ffd36b;
+  text-shadow: 0 1px 0 rgba(0,0,0,0.6);
+}
+.search {
+  flex:1;
+  display:flex;
+  justify-content:center;
+}
+.search input{
+  width:100%;
+  max-width:680px;
+  background:var(--soft);
+  border:1px solid rgba(255,255,255,0.03);
+  padding:10px 14px;
+  border-radius:999px;
+  color:var(--text);
+  outline:none;
+  font-size:14px;
+  box-shadow: 0 4px 12px rgba(2,6,10,0.5) inset;
+}
+.header-right{display:flex; gap:10px; align-items:center}
+
+/* page container */
+.container{
+  max-width:1100px;
+  margin:18px auto;
+  padding:0 14px;
 }
 
-nav {
-  margin-left: 32px;
-  display: flex;
-  gap: 20px;
+/* tabs */
+.tabs{
+  display:flex;
+  gap:10px;
+  overflow:auto;
+  padding-bottom:8px;
+  margin-bottom:12px;
+}
+.tab{
+  min-width:84px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+  justify-content:center;
+  background:var(--panel);
+  border-radius:12px;
+  padding:8px 12px;
+  color:var(--muted);
+  font-weight:600;
+  font-size:13px;
+  border:1px solid rgba(255,255,255,0.03);
+  cursor:pointer;
+  white-space:nowrap;
+}
+.tab.active{
+  background: linear-gradient(90deg,#1f2937, #17202b);
+  color:#fff;
+  border-bottom:4px solid var(--accent);
 }
 
-nav a {
-  color: var(--muted);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 14px;
+/* cards list */
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  margin-top:6px;
 }
 
-nav a:hover {
-  color: var(--text);
+/* player card */
+.player-card{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+  background:linear-gradient(180deg,var(--card), #0b0f14);
+  border-radius:16px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 6px 20px rgba(2,6,10,0.6);
 }
 
-/* LAYOUT */
-.wrapper {
-  max-width: 1200px;
-  margin: 32px auto;
-  padding: 0 16px;
+/* left colored rank band */
+.rank-band{
+  width:86px;
+  min-width:86px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-weight:800;
+  font-size:22px;
+  position:relative;
+  padding:22px 6px;
+  background:linear-gradient(135deg,var(--accent), #d98f1a);
+}
+.rank-band.small{width:72px;padding:18px 4px}
+
+/* content area */
+.card-body{
+  flex:1;
+  padding:12px 14px 12px 12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
-.page-title {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 20px;
+/* top row */
+.row-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.player-info{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+.avatar{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  overflow:hidden;
+  border:3px solid rgba(255,255,255,0.06);
+  box-shadow: 0 6px 18px rgba(2,6,10,0.6);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.name{
+  font-weight:700;
+  font-size:18px;
+  letter-spacing:0.2px;
+}
+.sub{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:2px;
+  display:flex;
+  gap:8px;
+  align-items:center;
 }
 
+/* badge */
+.badge{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  background:linear-gradient(90deg,#2b333b,#1f262b);
+  padding:6px 10px;
+  border-radius:999px;
+  color:var(--muted);
+  border:1px solid rgba(255,255,255,0.03);
+  font-weight:600;
+  font-size:13px;
+}
+
+/* tiers row */
+.tiers{
+  display:flex;
+  gap:8px;
+  padding-top:8px;
+  overflow:auto;
+}
+.tier{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  align-items:center;
+  min-width:46px;
+  width:46px;
+}
+.tier .ico{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(180deg,#0f1620,#0b1116);
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid rgba(255,255,255,0.04);
+  box-shadow:0 6px 12px rgba(0,0,0,0.5);
+}
+.tier .lvl{
+  background:#2f2d2a;
+  color:#f3d77a;
+  padding:4px 6px;
+  border-radius:8px;
+  font-size:11px;
+  margin-top:4px;
+}
+
+/* small right column */
+.card-right{
+  width:100px;
+  min-width:100px;
+  padding:12px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:center;
+  justify-content:center;
+  border-left:1px solid rgba(255,255,255,0.02);
+}
+
+/* responsiveness */
+@media(min-width:900px){
+  .player-card{flex-direction:row}
+  .card-right{width:160px}
+}
+
+/* footer */
+.footer{
+  text-align:center;
+  color:var(--muted);
+  padding:36px 16px;
+  font-size:13px;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">CREATIVE<span style="color:#fff">PVP</span></div>
+  <div class="search">
+    <input id="search" placeholder="Search player..." />
+  </div>
+  <div class="header-right">
+    <div class="badge">Discord</div>
+  </div>
+</div>
+
+<div class="container">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+    <h2 style="margin:0;font-size:20px">Rankings <span style="color:var(--muted);font-weight:500;margin-left:8px">Overall</span></h2>
+    <div style="color:var(--muted);font-size:13px">Server IP: <strong style="color:#fff;margin-left:6px">creativecraftCS.aternos.me:24097</strong></div>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-key="overall">🏆 Overall</div>
+    <div class="tab" data-key="pvp">⚔ PvP</div>
+    <div class="tab" data-key="archer">🏹 Archer</div>
+    <div class="tab" data-key="pot">🧪 Pot</div>
+    <div class="tab" data-key="vanilla">🍃 Vanilla</div>
+  </div>
+
+  <div class="list" id="list">
+    <!-- player card 1 -->
+    <div class="player-card">
+      <div class="rank-band">1.</div>
+      <div class="card-body">
+        <div class="row-top">
+          <div class="player-info">
+            <div class="avatar"><img src="https://crafatar.com/avatars/PlayerOne?size=128&overlay" alt="avatar"></div>
+            <div>
+              <div class="name">Marlowww</div>
+              <div class="sub"><span class="badge">Combat Grandmaster</span><span style="opacity:.9">North America</span></div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:800;font-size:18px">405</div>
+            <div style="color:var(--muted);font-size:12px">points</div>
+          </div>
+        </div>
+
+        <div class="tiers" aria-hidden>
+          <div class="tier"><div class="ico">⚔</div><div class="lvl">HT1</div></div>
+          <div class="tier"><div class="ico">🛡️</div><div class="lvl">HT1</div></div>
+          <div class="tier"><div class="ico">❤</div><div class="lvl">LT1</div></div>
+          <div class="tier"><div class="ico">⚗️</div><div class="lvl">LT1</div></div>
+          <div class="tier"><div class="ico">🏹</div><div class="lvl">LT1</div></div>
+          <div class="tier"><div class="ico">🔰</div><div class="lvl">LT1</div></div>
+          <div class="tier"><div class="ico">🗡️</div><div class="lvl">LT1</div></div>
+        </div>
+      </div>
+      <div class="card-right">
+        <div style="background:linear-gradient(180deg,#1b2730,#0f1418);padding:8px;border-radius:10px;font-weight:700">NA</div>
+        <div style="font-size:12px;color:var(--muted)">rank</div>
+      </div>
+    </div>
+
+    <!-- player card 2 -->
+    <div class="player-card">
+      <div class="rank-band" style="background:linear-gradient(135deg,#9aa8b2,#6b7280);">2.</div>
+      <div class="card-body">
+        <div class="row-top">
+          <div class="player-info">
+            <div class="avatar"><img src="https://crafatar.com/avatars/ItzRealMe?size=128&overlay" alt="avatar"></div>
+            <div>
+              <div class="name">ItzRealMe</div>
+              <div class="sub"><span class="badge">Combat Master</span><span style="opacity:.9">North America</span></div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:800;font-size:18px">385</div>
+            <div style="color:var(--muted);font-size:12px">points</div>
+          </div>
+        </div>
+
+        <div class="tiers" aria-hidden>
+          <div class="tier"><div class="ico">⚗️</div><div class="lvl">HT1</div></div>
+          <div class="tier"><div class="ico">⚔</div><div class="lvl">HT1</div></div>
+          <div class="tier"><div class="ico">🛠️</div><div class="lvl">LT2</div></div>
+          <div class="tier"><div class="ico">🏹</div><div class="lvl">LT1</div></div>
+          <div class="tier"><div class="ico">❤</div><div class="lvl">LT2</div></div>
+        </div>
+      </div>
+      <div class="card-right">
+        <div style="background:linear-gradient(180deg,#2b2f33,#121419);padding:8px;border-radius:10px;font-weight:700">NA</div>
+        <div style="font-size:12px;color:var(--muted)">rank</div>
+      </div>
+    </div>
+
+    <!-- player card 3 -->
+    <div class="player-card">
+      <div class="rank-band" style="background:linear-gradient(135deg,#d07a3b,#c15a2a);">3.</div>
+      <div class="card-body">
+        <div class="row-top">
+          <div class="player-info">
+            <div class="avatar"><img src="https://crafatar.com/avatars/Swight?size=128&overlay" alt="avatar"></div>
+            <div>
+              <div class="name">Swight</div>
+              <div class="sub"><span class="badge">Combat Master</span><span style="opacity:.9">North America</span></div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-weight:800;font-size:18px">370</div>
+            <div style="color:var(--muted);font-size:12px">points</div>
+          </div>
+        </div>
+
+        <div class="tiers" aria-hidden>
+          <div class="tier"><div class="ico">🪓</div><div class="lvl">HT1</div></div>
+          <div class="tier"><div class="ico">❤</div><div class="lvl">HT1</div></div>
+          <div class="tier"><div class="ico">⚗️</div><div class="lvl">HT2</div></div>
+          <div class="tier"><div class="ico">🔰</div><div class="lvl">LT2</div></div>
+        </div>
+      </div>
+      <div class="card-right">
+        <div style="background:linear-gradient(180deg,#2b2f33,#121419);padding:8px;border-radius:10px;font-weight:700">NA</div>
+        <div style="font-size:12px;color:var(--muted)">rank</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="height:28px"></div>
+
+  <div class="footer">© 2025 CreativePVP • Visual inspired by competitive ranking sites</div>
+</div>
+
+<script>
+// simple tabs + search demo (client-side)
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    // future: load category via API
+  });
+});
+
+document.getElementById('search').addEventListener('input', function(e){
+  const q = e.target.value.toLowerCase().trim();
+  document.querySelectorAll('.player-card').forEach(card=>{
+    const name = card.querySelector('.name').textContent.toLowerCase();
+    card.style.display = name.includes(q) ? 'flex' : 'none';
+  });
+});
+</script>
+
+</body>
+  </html>
 /* TABS */
 .tabs {
   display: flex;
