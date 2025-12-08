@@ -5,7 +5,16 @@
   border-radius: 6px;
   overflow: hidden;
 }
+.mc-row div:first-child {
+  color: #888;
+  font-weight: 500;
+}
 
+.mc-row div:last-child {
+  text-align: right;
+  font-weight: 600;
+}
+  
 .mc-row {
   display: grid;
   grid-template-columns: 60px 1fr 120px;
