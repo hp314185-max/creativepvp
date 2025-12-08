@@ -1,4 +1,41 @@
-* {
+* {/* TABLE (MCTIERS STYLE) */
+.mc-table {
+  margin-top: 20px;
+  background-color: #0f0f0f;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.mc-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 120px;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid #1f1f1f;
+  font-size: 14px;
+}
+
+.mc-row.mc-head {
+  font-size: 12px;
+  color: #9a9a9a;
+  text-transform: uppercase;
+  background-color: #121212;
+}
+
+.mc-player {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mc-player img {
+  border-radius: 4px;
+}
+
+.mc-row:last-child {
+  border-bottom: none;
+}
+  
   box-sizing: border-box;
 }
 
