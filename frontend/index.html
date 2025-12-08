@@ -33,15 +33,8 @@ header{
   background:var(--panel);
   border-bottom:1px solid var(--border);
 }
-.logo{
-  font-weight:800;
-  font-size:14px;
-  color:var(--accent);
-}
-.tabs{
-  display:flex;
-  gap:14px;
-}
+.logo{font-weight:800;font-size:14px;color:var(--accent)}
+.tabs{display:flex;gap:14px}
 .tab{
   font-size:12px;
   color:var(--muted);
@@ -55,11 +48,7 @@ header{
 }
 
 /* CONTENT */
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:12px;
-}
+.container{max-width:1100px;margin:auto;padding:12px}
 .table{
   border:1px solid var(--border);
   border-radius:6px;
@@ -75,21 +64,25 @@ header{
   font-size:12px;
 }
 .row:last-child{border-bottom:none}
-.rank{width:36px;text-align:right;font-weight:700}
-.avatar{
-  width:28px;height:28px;border-radius:4px;
-  overflow:hidden
+.rank{width:32px;text-align:right;font-weight:700}
+.tier{
+  width:36px;
+  text-align:center;
+  font-weight:800;
+  font-size:11px;
+  border-radius:4px;
+  padding:3px 0;
 }
+.tier.splus{background:#ff5252;color:#000}
+.tier.s{background:#ffb703;color:#000}
+.tier.a{background:#4cc9f0;color:#000}
+.tier.b{background:#80ed99;color:#000}
+.tier.c{background:#adb5bd;color:#000}
+
+.avatar{width:28px;height:28px;border-radius:4px;overflow:hidden}
 .avatar img{width:100%}
 .name{font-weight:600}
 .points{margin-left:auto;font-weight:600}
-
-.empty{
-  padding:20px;
-  text-align:center;
-  color:var(--muted);
-  font-size:13px;
-}
 </style>
 </head>
 
@@ -114,21 +107,27 @@ const table = document.getElementById("table");
 
 /* JOGADORES DO SEU SERVER (EDITÁVEL) */
 const players = [
-  {name:"SeuNick", points:120},
-  {name:"Player1", points:98},
-  {name:"Player2", points:75}
+  {name:"SeuNick", points:120, tier:"S+"},
+  {name:"Player1", points:98, tier:"S"},
+  {name:"Player2", points:75, tier:"A"},
+  {name:"Player3", points:50, tier:"B"}
 ];
 
-function render(mode){
+function tierClass(t){
+  if(t==="S+") return "splus";
+  if(t==="S") return "s";
+  if(t==="A") return "a";
+  if(t==="B") return "b";
+  return "c";
+}
+
+function render(){
   table.innerHTML = "";
-  if(players.length === 0){
-    table.innerHTML = '<div class="empty">Nenhum jogador registrado</div>';
-    return;
-  }
   players.forEach((p,i)=>{
     table.innerHTML += `
       <div class="row">
         <div class="rank">${i+1}</div>
+        <div class="tier ${tierClass(p.tier)}">${p.tier}</div>
         <div class="avatar">
           <img src="https://crafatar.com/avatars/${p.name}?overlay">
         </div>
@@ -139,17 +138,16 @@ function render(mode){
   });
 }
 
-/* ABAS */
+/* ABAS (por enquanto visual) */
 document.querySelectorAll(".tab").forEach(tab=>{
   tab.onclick = ()=>{
     document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
     tab.classList.add("active");
-    render(tab.dataset.mode);
+    render();
   };
 });
 
-/* INIT */
-render("overall");
+render();
 </script>
 
 </body>
