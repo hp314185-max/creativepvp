@@ -1,39 +1,73 @@
-<!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>CreativePVP — Rankings (MCTiers API)</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0b0f14; --panel:#0f1419; --muted:#94a3b8; --text:#e6eef6;
-  --accent:#f7b733; --card:#0e1318; --soft:#11151a; --radius:12px;
+  --bg:#090c10;
+  --panel:#0c1116;
+  --card:#0c1014;
+  --text:#e5edf5;
+  --muted:#8b9bb0;
+  --accent:#e6b35a;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
-.header{position:sticky;top:0;background:var(--panel);padding:10px 14px;border-bottom:1px solid rgba(255,255,255,0.03);display:flex;gap:12px;align-items:center;z-index:50}
-.logo{font-weight:800;color:#ffd36b}
-.search{flex:1;display:flex;justify-content:center}
-.search input{width:100%;max-width:700px;padding:9px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.03);background:#0b1014;color:var(--text)}
-.container{max-width:1100px;margin:12px auto;padding:0 12px}
-.topline{display:flex;justify-content:space-between;align-items:center;margin:8px 0 12px}
-.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:8px;margin-bottom:12px}
-.tab{min-width:86px;padding:8px 12px;border-radius:10px;background:var(--panel);color:var(--muted);font-weight:600;border:1px solid rgba(255,255,255,0.02);cursor:pointer;white-space:nowrap}
-.tab.active{color:#fff;border-bottom:3px solid var(--accent);background:linear-gradient(90deg,#111720,#0f1418)}
-.list{display:flex;flex-direction:column;gap:10px}
-.row{display:flex;align-items:center;gap:12px;background:linear-gradient(180deg,var(--card),#0b0f12);padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.02)}
-.rank{width:48px;flex:0 0 48px;font-weight:800;font-size:20px;color:#fff;display:flex;align-items:center;justify-content:center}
-.player-info{display:flex;align-items:center;gap:10px;flex:1}
-.avatar{width:44px;height:44px;border-radius:8px;overflow:hidden;border:2px solid rgba(255,255,255,0.04)}
-.avatar img{width:100%;height:100%;object-fit:cover;display:block}
-.name{font-weight:700;font-size:15px}
-.meta{font-size:12px;color:var(--muted)}
-.points{width:88px;text-align:right;font-weight:700}
-.tiers{display:flex;gap:8px;overflow:hidden;align-items:center}
-.tier{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#12171b,#0b0f12);border:1px solid rgba(255,255,255,0.03);font-size:12px}
-.pager{display:flex;gap:8px;justify-content:center;margin:18px 0}
-.btn{padding:8px 12px;border-radius:8px;background:var(--panel);border:1px solid rgba(255,255,255,0.03);color:var(--muted);cursor:pointer}
+body{
+  margin:0;
+  font-family:Inter,system-ui,Arial;
+  background:var(--bg);
+  color:var(--text);
+}
+.header{
+  padding:8px 12px;
+  background:var(--panel);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  display:flex;
+  align-items:center;
+}
+.logo{
+  font-weight:700;
+  font-size:14px;
+}
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:10px;
+}
+.row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px;
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.05);
+  border-radius:6px;
+  margin-bottom:6px;
+}
+.rank{
+  width:32px;
+  text-align:right;
+  font-weight:700;
+}
+.avatar{
+  width:32px;
+  height:32px;
+  border-radius:4px;
+  overflow:hidden;
+}
+.avatar img{
+  width:100%;
+}
+.name{
+  font-size:13px;
+  font-weight:600;
+}
+.meta{
+  font-size:11px;
+  color:var(--muted);
+}
+.points{
+  margin-left:auto;
+  font-size:12px;
+  font-weight:600;
+}
+</style>
 .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:80}
 .modal{width:92%;max-width:520px;background:linear-gradient(180deg,#0f1418,#0b0f12);border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03)}
 .close{position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.03);width:36px;height:36px;border-radius:999px;display:flex;align-items:center;justify-content:center;cursor:pointer}
