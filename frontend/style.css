@@ -1,3 +1,23 @@
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo-area">
+      <img src="logo.png" alt="CreativeCraftCS PvP" />
+      <h1>CreativeCraftCS PvP</h1>
+    </div>
+  </header>
+
+  <!-- ABAS -->
+  <nav class="tabs">
+    <button class="tab active">Overall</button>
+    <button class="tab">Sword</button>
+    <button class="tab">Vanilla</button>
+  </nav>
+
+  <!-- AQUI VEM SUA TABELA DE RANKING -->
+  
+</body>
 * {/* TABLE (MCTIERS STYLE) */
 .mc-table {
   margin-top: 20px;
